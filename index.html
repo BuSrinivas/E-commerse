@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Product Catalog</h2>
+
+<!-- Search -->
+Search: <input type="text" id="search" oninput="showProducts()">
+
+<!-- Category Filter -->
+<select id="category" onchange="showProducts()">
+    <option value="">All Categories</option>
+    <option>Electronics</option>
+    <option>Clothing</option>
+</select>
+
+<!-- Sort -->
+<select id="sort" onchange="showProducts()">
+    <option value="">Sort</option>
+    <option value="low">Price Low → High</option>
+    <option value="high">Price High → Low</option>
+</select>
+
+<br><br>
+
+<!-- Product Display -->
+<div id="products"></div>
+
+<script>
+
+// Product data (array of objects)
+let products = [
+    {name:"Phone", category:"Electronics", price:100},
+    {name:"Shirt", category:"Clothing", price:50},
+    {name:"Laptop", category:"Electronics", price:500},
+    {name:"Jeans", category:"Clothing", price:80}
+];
+
+// Main function
+function showProducts() {
+
+    let searchText = document.getElementById("search").value.toLowerCase();
+    let category = document.getElementById("category").value;
+    let sort = document.getElementById("sort").value;
+
+    let result = [];
+
+    // Filter products
+    for (let i = 0; i < products.length; i++) {
+
+        let p = products[i];
+
+        let matchSearch = p.name.toLowerCase().includes(searchText);
+        let matchCategory = (category == "" || p.category == category);
+
+        if (matchSearch && matchCategory) {
+            result.push(p);
+        }
+    }
+
+    // Sorting
+    if (sort == "low") {
+        result.sort(function(a, b) {
+            return a.price - b.price;
+        });
+    }
+
+    if (sort == "high") {
+        result.sort(function(a, b) {
+            return b.price - a.price;
+        });
+    }
+
+    // Display products
+    let output = "";
+
+    for (let i = 0; i < result.length; i++) {
+        output += "<div style='border:1px solid black; padding:10px; margin:5px; width:150px;'>";
+        output += result[i].name + "<br>";
+        output += result[i].category + "<br>";
+        output += "₹" + result[i].price;
+        output += "</div>";
+    }
+
+    document.getElementById("products").innerHTML = output;
+}
+
+// Show all products initially
+showProducts();
+
+</script>
+
+</body>
+</html>
